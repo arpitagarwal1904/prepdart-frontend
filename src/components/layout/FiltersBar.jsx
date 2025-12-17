@@ -279,7 +279,7 @@ export default function FiltersBar({ metadata, onSubmit, loading = false }) {
           </div>
 
           <div className="flex items-center gap-3 mt-4">
-            <Button type="submit" className="!bg-gray-100 hover:bg-gray-300 text-gray-900">Submit</Button>
+            <Button type="submit" className="hover:!text-gray-300 !border-none !bg-gray-600 text-white">Submit</Button>
           </div>
         </div>
       </div>
