@@ -35,7 +35,7 @@ export default function useQuestions(filters) {
         if (filters.questionTypeId != null)
           qs.set("question_type_dd", filters.questionTypeId)
 
-        qs.set("remove_used_questions", filters.removeUsedQuestions === false ? "false" : "true")
+        qs.set("remove_used_questions", false)
 
         const url = `/questions/retrieve?${qs.toString()}`
 

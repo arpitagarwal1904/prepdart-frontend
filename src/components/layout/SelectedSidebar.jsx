@@ -1,6 +1,6 @@
 // src/components/layout/SelectedSidebar.jsx
 import React from "react";
-import { X, Trash2, Tag, BookOpen, Layers, Eye, FileText } from "lucide-react"; // Added Eye
+import { X, Trash2, Tag, BookOpen, Layers, Eye, FileText, Save } from "lucide-react"; // Added Eye
 import { Button } from "@/components/ui/button";
 
 export default function SelectedSidebar({ 
@@ -8,7 +8,8 @@ export default function SelectedSidebar({
   onRemove, 
   onClearAll,
   onViewQuestion,
-  onOpenSummary
+  onOpenSummary,
+  onOpenSaveModal
 }) {
   return (
     <aside className="w-80 bg-white border-l flex flex-col h-full shrink-0 shadow-sm">
@@ -27,13 +28,22 @@ export default function SelectedSidebar({
         </div>
         {/* View Summary Button */}
         {selectedQuestions.length > 0 && (
-          <Button 
-            onClick={onOpenSummary}
-            className="w-full !border-none !bg-gray-600 text-white gap-2 h-9 text-xs font-semibold uppercase tracking-wider hover:!text-gray-300"
-          >
-            <FileText className="size-4" />
-            View Summary
-          </Button>
+          <div className="flex flex-col gap-2">
+            <Button 
+              onClick={onOpenSummary}
+              className="w-full !border-none !bg-gray-600 text-white gap-2 h-9 text-xs font-semibold uppercase tracking-wider hover:!text-gray-300"
+            >
+              <FileText className="size-4" />
+              View Summary
+            </Button>
+            <Button 
+                onClick={onOpenSaveModal}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white gap-2 h-9 text-xs font-semibold uppercase tracking-wider"
+              >
+                <Save className="size-4" />
+                Save Paper
+            </Button>
+          </div>
         )}
       </div>
 

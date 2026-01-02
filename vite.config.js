@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
   const API_BACKEND = 'http://localhost:7777'
-  const apiPrefixes = ['questions', 'papers', 'auth', 'uploads', 'files', 'courses']
+  const apiPrefixes = ['questions', 'papers', 'auth', 'uploads', 'files', 'courses', 'templates']
 
   const proxy = {}
 
@@ -16,6 +16,11 @@ export default defineConfig(({ mode }) => {
       target: API_BACKEND,
       changeOrigin: true,
       secure: false,
+      bypass: (req) => {
+        if (req.headers.accept?.indexOf('text/html') !== -1) {
+          return '/index.html';
+        }
+      },
       configure(proxyInstance) {
         proxyInstance.on('proxyReq', (proxyReq, req) => {
           const token = env.VITE_DEV_BEARER
@@ -37,7 +42,8 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      proxy
+      proxy,
+      historyApiFallback: true
     }
   }
 })

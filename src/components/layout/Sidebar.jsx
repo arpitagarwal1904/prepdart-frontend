@@ -18,7 +18,7 @@ export default function Sidebar({
     <aside className="w-64 bg-gray-50 border-r overflow-auto p-3">
       <ul className="space-y-1">
         {items.map((q, idx) => {
-          const id = q.id ?? idx;
+          const id = q.questionId ?? q.id ?? idx;
           const isSelected = selectedSet.has(id);
 
           return (
