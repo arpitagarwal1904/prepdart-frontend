@@ -6,7 +6,7 @@ import { apiFetch } from "@/lib/apiClient";
 import toast from "react-hot-toast";
 
 export default function GeneratePaperModal({ isOpen, onClose, questionIds }) {
-  const [loading, setLoading] = useState(false);
+  const [loadingType, setLoadingType] = useState(null); // 'question' | 'answer' | 'solution' | null
   const [templates, setTemplates] = useState([]);
   const [loadingTemplates, setLoadingTemplates] = useState(true);
   const [formData, setFormData] = useState({
@@ -50,10 +50,10 @@ export default function GeneratePaperModal({ isOpen, onClose, questionIds }) {
       return;
     }
 
-    setLoading(true);
+    setLoadingType(type);
 
     try {
-      // Construct query parameters
+      // Construct query parameters with questionIds
       const params = new URLSearchParams({
         templateId: formData.templateId,
         questionIds: questionIds.join(","),
@@ -83,11 +83,11 @@ export default function GeneratePaperModal({ isOpen, onClose, questionIds }) {
       }
 
       toast.success("Paper generated successfully!");
-      onClose();
+      // Don't close the modal - let user explicitly close it
     } catch (err) {
       toast.error(`Failed to generate paper: ${err.message}`);
     } finally {
-      setLoading(false);
+      setLoadingType(null);
     }
   };
 
@@ -183,11 +183,11 @@ export default function GeneratePaperModal({ isOpen, onClose, questionIds }) {
           <div className="pt-4 space-y-3 border-t">
             <Button
               type="button"
-              disabled={loading || !formData.templateId}
+              disabled={loadingType !== null || !formData.templateId}
               onClick={() => handleGenerate("question")}
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-11"
             >
-              {loading ? (
+              {loadingType === "question" ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Generating...
@@ -202,11 +202,11 @@ export default function GeneratePaperModal({ isOpen, onClose, questionIds }) {
 
             <Button
               type="button"
-              disabled={loading || !formData.templateId}
+              disabled={loadingType !== null || !formData.templateId}
               onClick={() => handleGenerate("answer")}
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-11"
             >
-              {loading ? (
+              {loadingType === "answer" ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Generating...
@@ -221,11 +221,11 @@ export default function GeneratePaperModal({ isOpen, onClose, questionIds }) {
 
             <Button
               type="button"
-              disabled={loading || !formData.templateId}
+              disabled={loadingType !== null || !formData.templateId}
               onClick={() => handleGenerate("solution")}
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-11"
             >
-              {loading ? (
+              {loadingType === "solution" ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Generating...
