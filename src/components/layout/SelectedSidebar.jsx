@@ -1,6 +1,6 @@
 // src/components/layout/SelectedSidebar.jsx
 import React from "react";
-import { X, Trash2, Tag, BookOpen, Layers, Eye, FileText, Save } from "lucide-react"; // Added Eye
+import { X, Trash2, Tag, BookOpen, Layers, Eye, FileText, Save, FileDown } from "lucide-react"; // Added Eye and FileDown
 import { Button } from "@/components/ui/button";
 
 export default function SelectedSidebar({ 
@@ -9,7 +9,8 @@ export default function SelectedSidebar({
   onClearAll,
   onViewQuestion,
   onOpenSummary,
-  onOpenSaveModal
+  onOpenSaveModal,
+  onOpenGenerateModal
 }) {
   return (
     <aside className="w-80 bg-white border-l flex flex-col h-full shrink-0 shadow-sm">
@@ -42,6 +43,13 @@ export default function SelectedSidebar({
               >
                 <Save className="size-4" />
                 Save Paper
+            </Button>
+            <Button 
+                onClick={onOpenGenerateModal}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white gap-2 h-9 text-xs font-semibold uppercase tracking-wider"
+              >
+                <FileDown className="size-4" />
+                Generate Paper
             </Button>
           </div>
         )}

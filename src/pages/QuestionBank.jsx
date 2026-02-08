@@ -9,6 +9,7 @@ import FiltersBar from "@/components/layout/FiltersBar";
 import SummaryModal from "@/components/layout/SummaryModal";
 import QuestionModal from "@/components/question/QuestionModal";
 import SavePaperModal from "@/components/layout/SavePaperModal";
+import GeneratePaperModal from "@/components/layout/GeneratePaperModal";
 import useQuestions from "@/hooks/useQuestions";
 import useMetadata from "@/hooks/useMetaData";
 import { apiFetch } from "@/lib/apiClient";
@@ -28,6 +29,7 @@ export default function QuestionBank() {
     const [viewingQuestion, setViewingQuestion] = useState(null);
     const [isSummaryOpen, setIsSummaryOpen] = useState(false);
     const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+    const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
 
     // Sync left sidebar highlights using questionId
     const selectedIdsSet = useMemo(() => 
@@ -164,6 +166,7 @@ export default function QuestionBank() {
                     onViewQuestion={setViewingQuestion}
                     onOpenSummary={() => setIsSummaryOpen(true)}
                     onOpenSaveModal={() => setIsSaveModalOpen(true)}
+                    onOpenGenerateModal={() => setIsGenerateModalOpen(true)}
                 />
             </div>
 
@@ -176,6 +179,14 @@ export default function QuestionBank() {
                         toast.success("Changes saved successfully!");
                         setSelectedQuestions([]);
                     }}
+                />
+            )}
+
+            {isGenerateModalOpen && (
+                <GeneratePaperModal
+                    isOpen={isGenerateModalOpen}
+                    onClose={() => setIsGenerateModalOpen(false)}
+                    questionIds={selectedQuestionIds}
                 />
             )}
 
