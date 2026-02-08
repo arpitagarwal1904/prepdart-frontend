@@ -1,12 +1,16 @@
 // src/components/layout/Header.jsx
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GraduationCap, Database, FileText, Copy, User, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import toast from "react-hot-toast";
 
 export default function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout, isAuthenticated } = useAuth();
 
   const navLinks = [
     { name: "Question Bank", path: "/", icon: Database },
@@ -14,6 +18,17 @@ export default function Header() {
     { name: "Templates", path: "/templates", icon: Copy },
     { name: "Profile", path: "/profile", icon: User },
   ];
+
+  const handleLogout = () => {
+    logout();
+    toast.success('Logged out successfully');
+    navigate('/login');
+  };
+
+  // Don't show header on login page
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <header className="h-16 border-b bg-white flex items-center justify-between px-6 shrink-0 z-30 shadow-sm">
@@ -45,7 +60,10 @@ export default function Header() {
           );
         })}
         
-        <div className="flex items-center gap-2 text-sm font-bold text-gray-900 ml-24 hover:bg-gray-200 px-2 py-2 rounded-sm cursor-pointer">
+        <div 
+          onClick={handleLogout}
+          className="flex items-center gap-2 text-sm font-bold text-gray-900 ml-24 hover:bg-gray-200 px-2 py-2 rounded-sm cursor-pointer"
+        >
           <LogOut className="size-4" />
           Logout
         </div>
