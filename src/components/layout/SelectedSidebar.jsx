@@ -54,7 +54,7 @@ export default function SelectedSidebar({
             </Button>
             <Button 
                 onClick={onOpenGenerateModal}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white gap-2 h-9 text-xs font-semibold uppercase tracking-wider"
+                className="w-full !border-none !bg-gray-600 text-white gap-2 h-9 text-xs font-semibold uppercase tracking-wider hover:!text-gray-300"
               >
                 <FileDown className="size-4" />
                 Generate Paper
