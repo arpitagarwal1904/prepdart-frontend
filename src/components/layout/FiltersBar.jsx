@@ -222,24 +222,6 @@ export default function FiltersBar({ metadata, onSubmit, loading = false }) {
               </Select>
             </div>
 
-            {/* TOPIC */}
-            <div className="min-w-0">
-              <div className="text-xs text-gray-600 mb-1">Topic</div>
-              <Select
-                key={`topic-${topics.length}-${topicId}`}
-                value={topicId}
-                onValueChange={v => setTopicId(String(v || ""))}
-                disabled={!topics.length}
-              >
-                <SelectTrigger className={triggerOverrideClass}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>{renderOptions(topics)}</SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
             {/* LEVEL */}
             <div className="min-w-0">
               <div className="text-xs text-gray-600 mb-1">Level</div>
@@ -275,6 +257,24 @@ export default function FiltersBar({ metadata, onSubmit, loading = false }) {
                 </SelectContent>
               </Select>
             </div>
+
+            {/* TOPIC */}
+            {/* <div className="min-w-0">
+              <div className="text-xs text-gray-600 mb-1">Topic</div>
+              <Select
+                key={`topic-${topics.length}-${topicId}`}
+                value={topicId}
+                onValueChange={v => setTopicId(String(v || ""))}
+                disabled={!topics.length}
+              >
+                <SelectTrigger className={triggerOverrideClass}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>{renderOptions(topics)}</SelectGroup>
+                </SelectContent>
+              </Select>
+            </div> */}
 
           </div>
 

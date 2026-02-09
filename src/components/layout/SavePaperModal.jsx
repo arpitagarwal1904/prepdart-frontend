@@ -1,20 +1,42 @@
 // src/components/layout/SavePaperModal.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Save, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { apiFetch } from "@/lib/apiClient";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-export default function SavePaperModal({ isOpen, onClose, questionIds, onSuccess }) {
+export default function SavePaperModal({ isOpen, onClose, questionIds, onSuccess, paperId, initialData }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     category: "", // Changed to free text
     date: new Date().toISOString().split('T')[0], // yyyy-mm-dd
-    narration: ""
+    narration: "",
+    id: ''
   });
+
+  // Autopopulate when initialData or isOpen changes
+  useEffect(() => {
+    if (isOpen && initialData) {
+      setFormData({
+        name: initialData.name || "",
+        category: initialData.category || "",
+        date: initialData.date ? initialData.date.split('T')[0] : new Date().toISOString().split('T')[0],
+        narration: initialData.narration || "",
+        id: Number(paperId)
+      });
+    } else if (isOpen && !paperId) {
+      // Reset form for fresh "Save Paper" if no paperId exists
+      setFormData({
+        name: "",
+        category: "",
+        date: new Date().toISOString().split('T')[0],
+        narration: ""
+      });
+    }
+  }, [isOpen, initialData, paperId]);
 
   if (!isOpen) return null;
 

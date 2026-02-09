@@ -24,6 +24,7 @@ export default function QuestionBank() {
     const [filters, setFilters] = useState(null);
     const { items, loading: questionsLoading } = useQuestions(filters);
 
+    const [paperMetadata, setPaperMetadata] = useState(null);
     const [selectedQuestions, setSelectedQuestions] = useState([]);
     const [hoveredQuestion, setHoveredQuestion] = useState(null);
     const [viewingQuestion, setViewingQuestion] = useState(null);
@@ -75,10 +76,18 @@ export default function QuestionBank() {
             hasFetchedPaper.current = true;
             try {
                 const res = await apiFetch(`/papers/${paperId}`);
-                if (res.status === 1 && res.paper?.questions) {
-                    // Directly map the questions from API response to our selected state
-                    const preLoaded = res.paper.questions.map(q => enrichQuestion(q, metadata, null));
-                    setSelectedQuestions(preLoaded);
+                if (res.status === 1 && res.paper) {
+                    // STORE PAPER NAME AND OTHER INFO
+                    setPaperMetadata({
+                        name: res.paper.name,
+                        category: res.paper.category,
+                        narration: res.paper.narration
+                    });
+
+                    if (res.paper.questions) {
+                        const preLoaded = res.paper.questions.map(q => enrichQuestion(q, metadata, null));
+                        setSelectedQuestions(preLoaded);
+                    }
                 }
             } catch (err) {
                 toast.error("Failed to load paper context");
@@ -167,6 +176,8 @@ export default function QuestionBank() {
                     onOpenSummary={() => setIsSummaryOpen(true)}
                     onOpenSaveModal={() => setIsSaveModalOpen(true)}
                     onOpenGenerateModal={() => setIsGenerateModalOpen(true)}
+                    paperId={paperId}
+                    paperName={paperMetadata?.name} // PASS PAPER NAME
                 />
             </div>
 
@@ -175,8 +186,10 @@ export default function QuestionBank() {
                     isOpen={isSaveModalOpen}
                     onClose={() => setIsSaveModalOpen(false)}
                     questionIds={selectedQuestionIds}
+                    paperId={paperId}
+                    initialData={paperMetadata} 
                     onSuccess={() => {
-                        toast.success("Changes saved successfully!");
+                        toast.success(paperId ? "Paper updated successfully!" : "Paper saved successfully!");
                         setSelectedQuestions([]);
                     }}
                 />

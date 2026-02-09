@@ -57,7 +57,7 @@ export default function Templates() {
           </div>
           <Button 
             onClick={() => setModalData({ isOpen: true, template: null })}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold"
+            className="w-48 !border-none !bg-gray-600 text-white gap-2 h-9 text-xs font-semibold uppercase tracking-wider hover:!text-gray-300"
           >
             <Plus className="mr-2 size-4" /> Create New
           </Button>

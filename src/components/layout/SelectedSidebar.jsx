@@ -10,10 +10,18 @@ export default function SelectedSidebar({
   onViewQuestion,
   onOpenSummary,
   onOpenSaveModal,
-  onOpenGenerateModal
+  onOpenGenerateModal,
+  paperId,
+  paperName
 }) {
   return (
     <aside className="w-80 bg-white border-l flex flex-col h-full shrink-0 shadow-sm">
+      {paperId && paperName && (
+        <div className="px-4 py-2 bg-indigo-600 text-white text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+          <FileText className="size-3" />
+          Editing: {paperName}
+        </div>
+      )}
       {/* Header same as your code */}
       <div className="p-4 border-b flex flex-col gap-3 bg-gray-50/50 shrink-0">
         <div className="flex items-center justify-between">
@@ -39,10 +47,10 @@ export default function SelectedSidebar({
             </Button>
             <Button 
                 onClick={onOpenSaveModal}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white gap-2 h-9 text-xs font-semibold uppercase tracking-wider"
+                className="w-full !border-none !bg-gray-600 text-white gap-2 h-9 text-xs font-semibold uppercase tracking-wider hover:!text-gray-300"
               >
                 <Save className="size-4" />
-                Save Paper
+                {paperId ? 'Update Paper': 'Save Paper'}
             </Button>
             <Button 
                 onClick={onOpenGenerateModal}
@@ -86,7 +94,7 @@ export default function SelectedSidebar({
                     variant="ghost" 
                     size="icon-sm" 
                     className="hover:!text-gray-300 !border-none !bg-gray-600 text-white h-7 w-7" 
-                    onClick={() => onRemove(q.id)}
+                    onClick={() => onRemove(q.questionId)}
                   >
                     <X className="size-3.5" />
                   </Button>
@@ -95,22 +103,18 @@ export default function SelectedSidebar({
 
               {/* Rest of metadata view remains same as your code */}
               <div className="space-y-1.5 border-t pt-2">
-                <div className="flex items-center gap-1.5 text-[10px] text-gray-500">
+                <div className="flex items-center gap-1.5 text-[11px] text-gray-500">
                   <Layers className="size-3 text-gray-400 shrink-0" />
                   <span className="truncate">{q.displayLabels?.chapterName}</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px] text-gray-500">
-                  <Tag className="size-3 text-gray-400 shrink-0" />
-                  <span className="truncate">{q.displayLabels?.topicName}</span>
-                </div>
                 <div className="flex flex-wrap gap-1 mt-1">
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full border bg-gray-50 text-gray-600 font-bold uppercase shrink-0">
+                  <span className="text-[8px] px-1.5 py-0.5 rounded-full border bg-gray-50 text-gray-600 font-bold uppercase shrink-0">
                     {q.displayLabels?.className}
                   </span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full border bg-gray-50 text-gray-600 font-bold uppercase shrink-0">
+                  <span className="text-[8px] px-1.5 py-0.5 rounded-full border bg-gray-50 text-gray-600 font-bold uppercase shrink-0">
                     {q.displayLabels?.levelName}
                   </span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full border bg-gray-50 text-gray-600 font-bold uppercase shrink-0">
+                  <span className="text-[8px] px-1.5 py-0.5 rounded-full border bg-gray-50 text-gray-600 font-bold uppercase shrink-0">
                     {q.displayLabels?.typeName}
                   </span>
                 </div>

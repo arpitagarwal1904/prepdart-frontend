@@ -37,11 +37,6 @@ export default function QuestionModal({ question, onClose }) {
             </div>
           )}
         </div>
-
-        {/* Modal Footer */}
-        <div className="px-6 py-4 border-t bg-gray-50 flex justify-end">
-          <Button onClick={onClose}>Close Preview</Button>
-        </div>
       </div>
     </div>
   );
