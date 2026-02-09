@@ -86,13 +86,8 @@ export default function GeneratePaperModal({ isOpen, onClose, questionIds }) {
       }
   
       // 2) Open clean preview URL using generationId
-      // Until cookie auth (Step 6/7), pass token in query param so new tab can auth.
-      const token = localStorage.getItem("prepdart_auth_token");
-      if (!token) {
-        throw new Error("Auth token missing. Please login again.");
-      }
   
-      const previewUrl = `${BACKEND_URL}/papers/generations/${generationId}/preview?token=${encodeURIComponent(token)}`;
+      const previewUrl = `${BACKEND_URL}/papers/generations/${generationId}/preview`;
       newWindow.location.href = previewUrl;
   
       toast.success("Paper generated successfully!");

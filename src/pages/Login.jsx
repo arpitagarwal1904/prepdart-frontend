@@ -28,13 +28,15 @@ export default function Login() {
       });
 
       // Handle the response structure: { token: { token: "...", user: {...} } }
-      if (response.token) {
-        login(response.token);
+      // Cookie-based auth: backend sets HttpOnly cookie and returns { user: {...} }
+      if (response.user) {
+        login(response.user); // store user in AuthContext (no token)
         toast.success('Login successful!');
         navigate('/');
       } else {
         setError('Invalid response from server');
       }
+
     } catch (err) {
       // Handle error response: { error: "Invalid email or password" }
       const errorMessage = err.data?.error || err.message || 'Login failed. Please try again.';
