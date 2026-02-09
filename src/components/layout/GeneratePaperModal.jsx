@@ -12,7 +12,6 @@ export default function GeneratePaperModal({ isOpen, onClose, questionIds }) {
   const [formData, setFormData] = useState({
     templateId: "",
     questionSeparator: "yes",
-    shuffleQuestions: "no",
     startNumbering: 1
   });
 
@@ -58,7 +57,6 @@ export default function GeneratePaperModal({ isOpen, onClose, questionIds }) {
         templateId: formData.templateId,
         questionIds: questionIds.join(","),
         type: type,
-        shuffle: formData.shuffleQuestions,
         separator: formData.questionSeparator,
         startNumbering: String(formData.startNumbering)
       });
@@ -140,8 +138,8 @@ export default function GeneratePaperModal({ isOpen, onClose, questionIds }) {
             )}
           </div>
 
-          {/* Question Separator, Shuffle Questions, Start Numbering Row */}
-          <div className="grid grid-cols-3 gap-4">
+          {/* Question Separator and Start Numbering Row */}
+          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-xs font-bold text-gray-500 uppercase">Question Separator</label>
               <select
@@ -151,18 +149,6 @@ export default function GeneratePaperModal({ isOpen, onClose, questionIds }) {
               >
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
-              </select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-gray-500 uppercase">Shuffle Questions</label>
-              <select
-                className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
-                value={formData.shuffleQuestions}
-                onChange={(e) => setFormData({ ...formData, shuffleQuestions: e.target.value })}
-              >
-                <option value="no">No</option>
-                <option value="yes">Yes</option>
               </select>
             </div>
 
