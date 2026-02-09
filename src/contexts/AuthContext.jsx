@@ -16,12 +16,21 @@ export function AuthProvider({ children }) {
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  const logout = useCallback(() => {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
-    setToken(null);
+  const logout = async () => {
+    try {
+      await apiFetch("/api/auth/logout", { method: "POST" });
+    } catch (_) {
+      // ignore logout failures
+    }
     setUser(null);
+    localStorage.removeItem("prepdart_user");
+  };
+  
+  useEffect(() => {
+    const saved = localStorage.getItem("prepdart_user");
+    if (saved) setUser(JSON.parse(saved));
   }, []);
+  
 
   useEffect(() => {
     // Check if token exists on mount
@@ -37,13 +46,11 @@ export function AuthProvider({ children }) {
     };
   }, [logout]);
 
-  const login = (tokenData) => {
-    const { token: authToken, user: userData } = tokenData;
-    localStorage.setItem(TOKEN_KEY, authToken);
-    localStorage.setItem(USER_KEY, JSON.stringify(userData));
-    setToken(authToken);
-    setUser(userData);
+  const login = (user) => {
+    setUser(user);
+    localStorage.setItem("prepdart_user", JSON.stringify(user));
   };
+  
 
   const isAuthenticated = !!token;
 
