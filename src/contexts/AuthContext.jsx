@@ -1,79 +1,92 @@
 // src/contexts/AuthContext.jsx
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo
+} from "react";
+import { apiFetch } from "@/lib/apiClient";
 
 const AuthContext = createContext(null);
 
-const TOKEN_KEY = 'prepdart_auth_token';
-const USER_KEY = 'prepdart_user';
+const USER_KEY = "prepdart_user";
+const LEGACY_TOKEN_KEY = "prepdart_auth_token"; // clean-up from old auth
+
+function safeParseUser(raw) {
+  if (!raw) return null;
+  if (raw === "undefined" || raw === "null") return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem(TOKEN_KEY);
-  });
   const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem(USER_KEY);
-    return stored ? JSON.parse(stored) : null;
+    const raw = localStorage.getItem(USER_KEY);
+    const parsed = safeParseUser(raw);
+
+    // If it's garbage like "undefined", remove it so it doesn't keep crashing
+    if (raw && !parsed) localStorage.removeItem(USER_KEY);
+
+    return parsed;
   });
+
   const [isLoading, setIsLoading] = useState(true);
 
-  const logout = async () => {
+  const login = useCallback((nextUser) => {
+    if (!nextUser) {
+      setUser(null);
+      localStorage.removeItem(USER_KEY);
+      localStorage.removeItem(LEGACY_TOKEN_KEY);
+      return;
+    }
+    setUser(nextUser);
+    localStorage.setItem(USER_KEY, JSON.stringify(nextUser));
+    localStorage.removeItem(LEGACY_TOKEN_KEY); // make sure old token is not used anywhere
+  }, []);
+
+  const logout = useCallback(async () => {
     try {
       await apiFetch("/api/auth/logout", { method: "POST" });
     } catch (_) {
       // ignore logout failures
     }
     setUser(null);
-    localStorage.removeItem("prepdart_user");
-  };
-  
-  useEffect(() => {
-    const saved = localStorage.getItem("prepdart_user");
-    if (saved) setUser(JSON.parse(saved));
+    localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(LEGACY_TOKEN_KEY);
   }, []);
-  
 
   useEffect(() => {
-    // Check if token exists on mount
     setIsLoading(false);
 
-    // Listen for logout events from apiClient (e.g., on 401 errors)
-    const handleLogout = () => {
-      logout();
-    };
-    window.addEventListener('auth:logout', handleLogout);
-    return () => {
-      window.removeEventListener('auth:logout', handleLogout);
-    };
+    const handleLogout = () => logout();
+    window.addEventListener("auth:logout", handleLogout);
+    return () => window.removeEventListener("auth:logout", handleLogout);
   }, [logout]);
 
-  const login = (user) => {
-    setUser(user);
-    localStorage.setItem("prepdart_user", JSON.stringify(user));
-  };
-  
+  // ✅ cookie auth => authenticated if we have a user object in memory/localStorage
+  const isAuthenticated = !!user;
 
-  const isAuthenticated = !!token;
-
-  return (
-    <AuthContext.Provider
-      value={{
-        token,
-        user,
-        isAuthenticated,
-        isLoading,
-        login,
-        logout,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({
+      user,
+      isAuthenticated,
+      isLoading,
+      login,
+      logout
+    }),
+    [user, isAuthenticated, isLoading, login, logout]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
   return context;
 }
