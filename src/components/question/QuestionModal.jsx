@@ -19,8 +19,8 @@ export default function QuestionModal({ question, onClose }) {
               {question.displayLabels?.className} • {question.displayLabels?.subjectName}
             </p>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full">
-            <X className="size-5" />
+          <Button variant="ghost" size="icon"  onClick={onClose} className="rounded-full hover:!text-gray-300 !border-none !bg-gray-600 text-white h-8 w-10">
+            <X className="size-3.5 " />
           </Button>
         </div>
 

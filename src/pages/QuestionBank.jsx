@@ -148,21 +148,18 @@ export default function QuestionBank() {
                         onSelect={handleToggleSelection}
                         selectedIds={Array.from(selectedIdsSet)}
                         onHoverQuestion={setHoveredQuestion}
+                        loading={questionsLoading}
                     />
                 </aside>
 
                 <main className="flex-1 overflow-y-auto p-6 bg-gray-50/50">
                     <div className="max-w-4xl mx-auto space-y-6">
                         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-                            {questionsLoading ? (
-                                <div className="p-12 text-center text-gray-400 italic">Updating results...</div>
-                            ) : (
-                                <QuestionPreview question={current} />
-                            )}
+                            <QuestionPreview question={current} loading={questionsLoading} />
                         </div>
-                        {current?.solutionHtml && (
+                        {(current || questionsLoading) && (
                             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-                                <SolutionPanel solution={current.solutionHtml} />
+                                <SolutionPanel solution={current?.solutionHtml} loading={questionsLoading} />
                             </div>
                         )}
                     </div>

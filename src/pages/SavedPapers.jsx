@@ -51,14 +51,6 @@ export default function SavedPapers() {
                         <h1 className="text-2xl font-black text-gray-900 tracking-tight">Saved Papers</h1>
                         <p className="text-sm text-gray-500 font-medium">Manage and review your generated test papers</p>
                     </div>
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
-                        <input
-                            type="text"
-                            placeholder="Search papers..."
-                            className="pl-10 pr-4 py-2 bg-gray-50 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none w-64"
-                        />
-                    </div>
                 </div>
             </div>
 

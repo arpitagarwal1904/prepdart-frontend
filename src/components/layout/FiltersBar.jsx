@@ -166,7 +166,7 @@ export default function FiltersBar({ metadata, onSubmit, loading = false }) {
       <div className="px-4 py-3">
         <div className="flex items-center gap-4">
 
-          <div className="flex-1 grid grid-cols-6 gap-3 min-w-0">
+          <div className="flex-1 grid grid-cols-5 gap-3 min-w-0">
 
             {/* CLASS */}
             <div className="min-w-0">
