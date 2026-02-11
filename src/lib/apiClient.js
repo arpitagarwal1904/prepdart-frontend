@@ -1,6 +1,14 @@
 // src/lib/apiClient.js
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ""; 
+
 export async function apiFetch(path, opts = {}) {
+
+  const url =
+  path.startsWith("http://") || path.startsWith("https://")
+    ? path
+    : `${API_BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
+
   // 1) Prepare headers
   const headers = {
     ...opts.headers,
@@ -13,7 +21,7 @@ export async function apiFetch(path, opts = {}) {
   }
 
   // 3) Fetch with cookies included (cookie-based auth)
-  const res = await fetch(path, {
+  const res = await fetch(url, {
     ...opts,
     headers,
     credentials: "include", // ✅ IMPORTANT: send/receive cookies
